@@ -96,6 +96,9 @@ module.exports = function(webpackConfig) {
     .......
   };
   webpackConfig.postcss.push(px2rem(px2remOpts));
+
+  return webpackConfig;
+};
 ```
 
 ## Configuration
