@@ -53,12 +53,12 @@ import pxtorem from 'postcss-plugin-px2rem';
 
 const css = readFileSync('/path/to/test.css', 'utf8');
 const options = {
-  replace: false
+  replace: false,
 };
 const processedCss = postcss(pxtorem(options)).process(css).css;
 
 writeFile('/path/to/test.rem.css', processedCss, err => {
-  if (err) throw err
+  if (err) throw err;
   console.log('Rem file written.');
 });
 ```
@@ -69,7 +69,7 @@ writeFile('/path/to/test.rem.css', processedCss, err => {
 import px2rem from 'postcss-plugin-px2rem';
 const px2remOpts = {
   ......
-}
+};
  
 export default {
   module: {
@@ -78,9 +78,9 @@ export default {
         test: /\.css$/,
         loader: 'style-loader!css-loader!postcss-loader',
       },
-    ]
+    ],
   },
-  postcss: [px2rem(px2remOpts)];
+  postcss: [px2rem(px2remOpts)],
 }
 ```
 
