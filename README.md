@@ -67,6 +67,9 @@ writeFile('/path/to/test.rem.css', processedCss, err => {
 
 ```javascript
 import px2rem from 'postcss-plugin-px2rem';
+const px2remOpts = {
+  ......
+}
  
 module.exports = {
   module: {
@@ -78,7 +81,7 @@ module.exports = {
     ]
   },
   postcss: function () {
-    return [px2rem];
+    return [px2rem(px2remOpts)];
   }
 }
 ```
