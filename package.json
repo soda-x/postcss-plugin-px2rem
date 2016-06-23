@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/ant-tool/postcss-plugin-px2rem#readme",
   "dependencies": {
-
+    "postcss": "^5.0.21"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
@@ -40,7 +40,7 @@
     "coveralls": "^2.11.9",
     "eslint": "^2.7.0",
     "eslint-config-airbnb": "^6.2.0",
-    "expect.js": "^0.3.1",
+    "expect": "^1.20.1",
     "mocha": "^2.4.5"
   },
   "files": [
