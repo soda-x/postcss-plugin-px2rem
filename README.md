@@ -71,18 +71,16 @@ const px2remOpts = {
   ......
 }
  
-module.exports = {
+export default {
   module: {
     loaders: [
       {
         test: /\.css$/,
         loader: 'style-loader!css-loader!postcss-loader',
-      }
+      },
     ]
   },
-  postcss: function () {
-    return [px2rem(px2remOpts)];
-  }
+  postcss: [px2rem(px2remOpts)];
 }
 ```
 
@@ -91,12 +89,12 @@ module.exports = {
 `webpack.connfig.js`
 
 ```javascript
-var webpack = require('atool-build/lib/webpack');
-var px2rem = require('postcss-plugin-px2rem');
+import webpack from 'atool-build/lib/webpack';
+import px2rem from 'postcss-plugin-px2rem';
 
-module.exports = function(webpackConfig) {
-  var px2remOpts = {
-    .......
+export default webpackConfig => {
+  const px2remOpts = {
+    ......
   };
   webpackConfig.postcss.push(px2rem(px2remOpts));
 
