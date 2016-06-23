@@ -112,6 +112,7 @@ Default:
   rootValue: 100,
   unitPrecision: 5,
   propWhiteList: [],
+  propBlackList: [],
   selectorBlackList: [],
   ignoreIdentifier: false,
   replace: true,
@@ -124,6 +125,8 @@ Default:
 - `unitPrecision` (Number) The decimal numbers to allow the REM units to grow to.
 - `propWhiteList` (Array) The properties that can change from px to rem.
     - Default is an empty array that means disable the white list and enable all properties.
+    - Values need to be exact matches.
+- `propBlackList` (Array) The properties that should not change from px to rem.
     - Values need to be exact matches.
 - `selectorBlackList` (Array) The selectors to ignore and leave as px.
     - If value is string, it checks to see if selector contains the string.

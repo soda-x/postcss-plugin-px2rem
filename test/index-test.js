@@ -118,6 +118,18 @@ describe('propWhiteList', () => {
   });
 });
 
+describe('propBlackList', () => {
+  it('should not replace properties in the black list', () => {
+    const expected = '.rule { font-size: 15px }';
+    const options = {
+      propBlackList: ['font'],
+    };
+    const processed = postcss(pxtorem(options)).process(basicCSS).css;
+
+    expect(processed).toBe(expected);
+  });
+});
+
 describe('selectorBlackList', () => {
   it('should ignore selectors in the selector black list', () => {
     const rules = '.rule { font-size: 15px } .rule2 { font-size: 15px }';

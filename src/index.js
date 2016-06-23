@@ -8,6 +8,7 @@ const defaultOpts = {
   unitPrecision: 5,
   selectorBlackList: [],
   propWhiteList: [],
+  propBlackList: [],
   ignoreIdentifier: false,
   replace: true,
   mediaQuery: false,
@@ -45,6 +46,16 @@ const blacklistedSelector = (blacklist, selector) => {
   });
 };
 
+const blacklistedProp = (blacklist, prop) => {
+  if (typeof prop !== 'string') return false;
+
+  return blacklist.some(regex => {
+    if (typeof regex === 'string') return prop.indexOf(regex) !== -1;
+
+    return prop.match(regex);
+  });
+};
+
 const handleIgnoreIdentifierRegx = identifier => {
   const _identifier = identifier;
   let backslashfy = _identifier.split('').join('\\');
@@ -72,9 +83,11 @@ export default postcss.plugin('postcss-plugin-px2rem', options => {
       const _decl = decl;
       // 1st check 'px'
       if (_decl.value.indexOf('px') === -1) return;
-      // 2nd check property white list
+      // 2nd check property black list
+      if (blacklistedProp(opts.propBlackList, _decl.prop)) return;
+      // 3rd check property white list
       if (opts.propWhiteList.length && opts.propWhiteList.indexOf(_decl.prop) === -1) return;
-      // 3rd check seletor black list
+      // 4th check seletor black list
       if (blacklistedSelector(opts.selectorBlackList, _decl.parent.selector)) return;
 
       const value = _decl.value.replace(pxRegex, pxReplace);
