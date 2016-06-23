@@ -83,6 +83,21 @@ module.exports = {
 }
 ```
 
+### with [atool-build](https://github.com/ant-tool/atool-build)
+
+`webpack.connfig.js`
+
+```javascript
+var webpack = require('atool-build/lib/webpack');
+var px2rem = require('postcss-plugin-px2rem');
+
+module.exports = function(webpackConfig) {
+  var px2remOpts = {
+    .......
+  };
+  webpackConfig.postcss.push(px2rem(px2remOpts));
+```
+
 ## Configuration
 
 Default:
