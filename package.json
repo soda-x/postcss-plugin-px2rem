@@ -1,6 +1,6 @@
 {
   "name": "postcss-plugin-px2rem",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "postcss plugin px2rem",
   "main": "index.js",
   "scripts": {
