@@ -215,3 +215,50 @@ describe('minPixelValue', () => {
     expect(processed).toBe(expected);
   });
 });
+
+describe('rpx support', function() {
+  it('should work on the readme example', () => {
+    const input = 'h1 { margin: 0 0 20rpx 20rpx; font-size: 32px; line-height: 1.2; letter-spacing: 1rpx; }';
+    const output = 'h1 { margin: 0 0 0.2rem 0.2rem; font-size: 0.64rem; line-height: 1.2; letter-spacing: 0.01rem; }';
+    const processed = postcss(pxtorem({
+      rootValue: { px: 50, rpx: 100 },
+    })).process(input).css;
+
+    expect(processed).toBe(output);
+  });
+
+  it('should replace rpx in media queries', () => {
+    const options = {
+      mediaQuery: true,
+      rootValue: { px: 50, rpx: 100 },
+    };
+    const processed = postcss(pxtorem(options)).process('@media (min-width: 500rpx) { .rule { font-size: 16px } }').css;
+    const expected = '@media (min-width: 5rem) { .rule { font-size: 0.32rem } }';
+
+    expect(processed).toBe(expected);
+  });
+
+  it('should ignore selectors in the selector black list', () => {
+    const rules = '.rule { font-size: 15rpx } .rule2 { font-size: 15px }';
+    const expected = '.rule { font-size: 0.15rem } .rule2 { font-size: 15px }';
+    const options = {
+      selectorBlackList: ['.rule2'],
+      rootValue: { px: 50, rpx: 100 },
+    };
+    const processed = postcss(pxtorem(options)).process(rules).css;
+
+    expect(processed).toBe(expected);
+  });
+
+  it('should not replace px when ignoreIdentifier enabled', () => {
+    const options = {
+      ignoreIdentifier: '00',
+      rootValue: { px: 100, rpx: 100 },
+    };
+    const input = 'h1 { margin: 0 0 00.5px 16rpx; border-width: 001px; font-size: 32px; font-family: "16px"; }';
+    const output = 'h1 { margin: 0 0 .5px 0.16rem; border-width: 1px; font-size: 0.32rem; font-family: "16px"; }';
+    const processed = postcss(pxtorem(options)).process(input).css;
+
+    expect(processed).toBe(output);
+  });
+});

@@ -119,7 +119,9 @@ Default:
 }
 ```
 
-- `rootValue` (Number) The root element font size. Default is 100.
+- `rootValue` (Number|Object) The root element font size. Default is 100.
+    - If rootValue is an object, for example `{ px: 50, rpx: 100 }`, it will
+    replace rpx to 1/100 rem , and px to 1/50 rem.
 - `unitPrecision` (Number) The decimal numbers to allow the REM units to grow to.
 - `propWhiteList` (Array) The properties that can change from px to rem.
     - Default is an empty array that means disable the white list and enable all properties.

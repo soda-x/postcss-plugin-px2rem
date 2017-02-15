@@ -21,13 +21,16 @@ const toFixed = (number, precision) => {
 
   return Math.round(wholeNumber / 10) * 10 / multiplier;
 };
+const isObject = o => typeof o === 'object' && o !== null;
 
-const createPxReplace = (rootValue, identifier, unitPrecision, minPixelValue) => (m, $1) => {
+const createPxReplace = (rootValue, identifier, unitPrecision, minPixelValue) => (m, $1, $2) => {
   if (!$1) return m;
   if (identifier && m.indexOf(identifier) === 0) return m.replace(identifier, '');
   const pixels = parseFloat($1);
   if (pixels < minPixelValue) return m;
-  const fixedVal = toFixed((pixels / rootValue), unitPrecision);
+  // { px: 100, rpx: 50 }
+  const baseValue = isObject(rootValue) ? rootValue[$2] : rootValue;
+  const fixedVal = toFixed((pixels / baseValue), unitPrecision);
 
   return `${fixedVal}rem`;
 };
@@ -56,23 +59,29 @@ const blacklistedProp = (blacklist, prop) => {
   });
 };
 
-const handleIgnoreIdentifierRegx = identifier => {
+const handleIgnoreIdentifierRegx = (identifier, unit) => {
   const _identifier = identifier;
   let backslashfy = _identifier.split('').join('\\');
   backslashfy = `\\${backslashfy}`;
-  const pattern = `"[^"]+"|'[^']+'|url\\([^\\)]+\\)|((${backslashfy}|\\d*)\\.?\\d+)px`;
+  const pattern = `"[^"]+"|'[^']+'|url\\([^\\)]+\\)|((?:${backslashfy}|\\d*)\\.?\\d+)(${unit})`;
 
   return new RegExp(pattern, 'ig');
 };
 
 export default postcss.plugin('postcss-plugin-px2rem', options => {
   const opts = { ...defaultOpts, ...options };
-  let pxRegex = /"[^"]+"|'[^']+'|url\([^\)]+\)|(\d*\.?\d+)px/ig;
+  let unit = 'px';
+  if (isObject(opts.rootValue)) {
+    unit = Object.keys(opts.rootValue).join('|');
+  }
+
+  const regText = `"[^"]+"|'[^']+'|url\\([^\\)]+\\)|(\\d*\\.?\\d+)(${unit})`;
+  let pxRegex = new RegExp(regText, 'ig');
   let identifier = opts.ignoreIdentifier;
   if (identifier && typeof identifier === 'string') {
     identifier = identifier.replace(/\s+/g, '');
     opts.replace = true;
-    pxRegex = handleIgnoreIdentifierRegx(identifier);
+    pxRegex = handleIgnoreIdentifierRegx(identifier, unit);
   } else {
     identifier = false;
   }
