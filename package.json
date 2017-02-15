@@ -1,7 +1,7 @@
 {
   "name": "postcss-plugin-px2rem",
-  "version": "0.6.0",
-  "description": "postcss plugin px2rem",
+  "version": "0.7.0",
+  "description": "A plugin for PostCSS that generates rem units from multi units.",
   "main": "index.js",
   "scripts": {
     "compile": "rm -rf lib && babel -d lib src",
