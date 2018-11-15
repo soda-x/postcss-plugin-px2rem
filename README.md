@@ -111,6 +111,7 @@ Default:
   unitPrecision: 5,
   propWhiteList: [],
   propBlackList: [],
+  exclude:false,
   selectorBlackList: [],
   ignoreIdentifier: false,
   replace: true,
@@ -128,6 +129,7 @@ Default:
     - Values need to be exact matches.
 - `propBlackList` (Array) The properties that should not change from px to rem.
     - Values need to be exact matches.
+- `exclude` (Reg)  a way to exclude some folder,eg. /(node_module)/.
 - `selectorBlackList` (Array) The selectors to ignore and leave as px.
     - If value is string, it checks to see if selector contains the string.
         - `['body']` will match `.body-class`
