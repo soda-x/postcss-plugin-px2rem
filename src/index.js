@@ -90,13 +90,15 @@ export default postcss.plugin('postcss-plugin-px2rem', options => {
   return css => {
     css.walkDecls((decl, i) => {
       const _decl = decl;
-      // 1st check 'px'
+      // 1st check exclude
+      if (opts.exclude && css.source.input.file.match(opts.exclude) !== null) return;
+      // 2st check 'px'
       if (_decl.value.indexOf('px') === -1) return;
-      // 2nd check property black list
+      // 3nd check property black list
       if (blacklistedProp(opts.propBlackList, _decl.prop)) return;
-      // 3rd check property white list
+      // 4rd check property white list
       if (opts.propWhiteList.length && opts.propWhiteList.indexOf(_decl.prop) === -1) return;
-      // 4th check seletor black list
+      // 5th check seletor black list
       if (blacklistedSelector(opts.selectorBlackList, _decl.parent.selector)) return;
 
       const value = _decl.value.replace(pxRegex, pxReplace);
