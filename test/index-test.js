@@ -216,7 +216,7 @@ describe('minPixelValue', () => {
   });
 });
 
-describe('rpx support', function() {
+describe('rpx support', function () {
   it('should work on the readme example', () => {
     const input = 'h1 { margin: 0 0 20rpx 20rpx; font-size: 32px; line-height: 1.2; letter-spacing: 1rpx; }';
     const output = 'h1 { margin: 0 0 0.2rem 0.2rem; font-size: 0.64rem; line-height: 1.2; letter-spacing: 0.01rem; }';
@@ -259,6 +259,30 @@ describe('rpx support', function() {
     const output = 'h1 { margin: 0 0 .5px 0.16rem; border-width: 1px; font-size: 0.32rem; font-family: "16px"; }';
     const processed = postcss(pxtorem(options)).process(input).css;
 
+    expect(processed).toBe(output);
+  });
+});
+
+describe('exclude support', () => {
+  it('should work on the readme example', () => {
+    const input = 'h1 { margin: 0 0 20px 20px; font-size: 32px; line-height: 1.2; letter-spacing: 1px; }';
+    const output = 'h1 { margin: 0 0 20px 20px; font-size: 32px; line-height: 1.2; letter-spacing: 1px; }';
+    const processed = postcss(pxtorem({
+      exclude: /(node_modules)/,
+    })).process(input, {
+      from: 'node_modules/third.css',
+    }).css;
+    expect(processed).toBe(output);
+  });
+
+  it('should work when exclude option range doesn\'t cover', () => {
+    const input = 'h1 { margin: 0 0 20px 20px; font-size: 32px; line-height: 1.2; letter-spacing: 1px; }';
+    const output = 'h1 { margin: 0 0 0.2rem 0.2rem; font-size: 0.32rem; line-height: 1.2; letter-spacing: 0.01rem; }';
+    const processed = postcss(pxtorem({
+      exclude: /(node_modules)/,
+    })).process(input, {
+      from: 'lib/own.css',
+    }).css;
     expect(processed).toBe(output);
   });
 });

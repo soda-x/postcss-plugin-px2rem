@@ -91,7 +91,7 @@ export default postcss.plugin('postcss-plugin-px2rem', options => {
     css.walkDecls((decl, i) => {
       const _decl = decl;
       // 1st check exclude
-      if (opts.exclude && css.source.input.file.match(opts.exclude) !== null) return;
+      if (opts.exclude && css.source.input.file && css.source.input.file.match(opts.exclude) !== null) return;
       // 2st check 'px'
       if (_decl.value.indexOf('px') === -1) return;
       // 3nd check property black list
