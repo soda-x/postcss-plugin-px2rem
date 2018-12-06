@@ -7,6 +7,7 @@
     "compile": "rm -rf lib && babel -d lib src",
     "compile:watch": "npm run compile -- --watch",
     "lint": "eslint src test",
+    "prepublish": "npm run compile",
     "test": "babel-node $(npm bin)/babel-istanbul cover $(npm bin)/_mocha -- --no-timeouts",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
