@@ -263,6 +263,26 @@ describe('rpx support', function () {
   });
 });
 
+describe('PX support', function () {
+  const sourceCSS = '.rule { font-size: 15PX }';
+
+  it('do not transpile PX by default', () => {
+    const expected = sourceCSS;
+    const processed = postcss(pxtorem()).process(sourceCSS).css;
+    expect(processed).toBe(expected);
+  });
+
+  it('transpile PX by passing rootValue', () => {
+    const expected = '.rule { font-size: 0.15rem }';
+    const processed = postcss(pxtorem({
+      rootValue: {
+        PX: 100,
+      },
+    })).process(sourceCSS).css;
+    expect(processed).toBe(expected);
+  });
+});
+
 describe('exclude support', () => {
   it('should work on the readme example', () => {
     const input = 'h1 { margin: 0 0 20px 20px; font-size: 32px; line-height: 1.2; letter-spacing: 1px; }';

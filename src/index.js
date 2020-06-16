@@ -71,8 +71,10 @@ const handleIgnoreIdentifierRegx = (identifier, unit) => {
 export default postcss.plugin('postcss-plugin-px2rem', options => {
   const opts = { ...defaultOpts, ...options };
   let unit = 'px';
+  let units = [unit];
   if (isObject(opts.rootValue)) {
-    unit = Object.keys(opts.rootValue).join('|');
+    units = Object.keys(opts.rootValue);
+    unit = units.join('|');
   }
 
   const regText = `"[^"]+"|'[^']+'|url\\([^\\)]+\\)|(\\d*\\.?\\d+)(${unit})`;
@@ -92,8 +94,8 @@ export default postcss.plugin('postcss-plugin-px2rem', options => {
       const _decl = decl;
       // 1st check exclude
       if (opts.exclude && css.source.input.file && css.source.input.file.match(opts.exclude) !== null) return;
-      // 2st check 'px'
-      if (_decl.value.indexOf('px') === -1) return;
+      // 2st check units (px、PX、rpx)
+      if (!units.some(_unit => _decl.value.includes(_unit))) return;
       // 3nd check property black list
       if (blacklistedProp(opts.propBlackList, _decl.prop)) return;
       // 4rd check property white list
