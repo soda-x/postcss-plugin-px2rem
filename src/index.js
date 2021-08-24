@@ -13,6 +13,7 @@ const defaultOpts = {
   replace: true,
   mediaQuery: false,
   minPixelValue: 0,
+  selectorDoubleRemList: [],
 };
 
 const toFixed = (number, precision) => {
@@ -23,15 +24,15 @@ const toFixed = (number, precision) => {
 };
 const isObject = o => typeof o === 'object' && o !== null;
 
-const createPxReplace = (rootValue, identifier, unitPrecision, minPixelValue) => (m, $1, $2) => {
+const createPxReplace = (rootValue, identifier, unitPrecision, minPixelValue) => (m, $1, $2, doubleRem) => {
   if (!$1) return m;
   if (identifier && m.indexOf(identifier) === 0) return m.replace(identifier, '');
   const pixels = parseFloat($1);
   if (pixels < minPixelValue) return m;
   // { px: 100, rpx: 50 }
   const baseValue = isObject(rootValue) ? rootValue[$2] : rootValue;
-  const fixedVal = toFixed((pixels / baseValue), unitPrecision);
-
+  const double = doubleRem === true ? 2 : 1;
+  const fixedVal = toFixed((pixels * double / baseValue), unitPrecision);
   return `${fixedVal}rem`;
 };
 
@@ -100,8 +101,8 @@ export default postcss.plugin('postcss-plugin-px2rem', options => {
       if (opts.propWhiteList.length && opts.propWhiteList.indexOf(_decl.prop) === -1) return;
       // 5th check seletor black list
       if (blacklistedSelector(opts.selectorBlackList, _decl.parent.selector)) return;
-
-      const value = _decl.value.replace(pxRegex, pxReplace);
+      const doubleRem = blacklistedSelector(opts.selectorDoubleRemList, _decl.parent.selector);
+      const value = _decl.value.replace(pxRegex, (m, $1, $2) => pxReplace(m, $1, $2, doubleRem));
 
       // if rem unit already exists, do not add or replace
       if (declarationExists(_decl.parent, _decl.prop, value)) return;
