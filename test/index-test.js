@@ -5,6 +5,16 @@ import pxtorem from '../src/';
 const basicCSS = '.rule { font-size: 15px }';
 
 describe('px2rem', () => {
+  it('px to 2*rem,if .ant-*', () => {
+    const input = '.ant-abc { margin: 0 0 20px 20px; font-size: 32px; line-height: 1.2; letter-spacing: 1px; }';
+    const output = '.ant-abc { margin: 0 0 0.4rem 0.4rem; font-size: 0.64rem; line-height: 1.2; letter-spacing: 0.02rem; }';
+    const processed = postcss(pxtorem({
+      selectorDoubleRemList: [/.ant-/],
+    })).process(input).css;
+
+    expect(processed).toBe(output);
+  });
+
   it('should work on the readme example', () => {
     const input = 'h1 { margin: 0 0 20px 20px; font-size: 32px; line-height: 1.2; letter-spacing: 1px; }';
     const output = 'h1 { margin: 0 0 0.2rem 0.2rem; font-size: 0.32rem; line-height: 1.2; letter-spacing: 0.01rem; }';
