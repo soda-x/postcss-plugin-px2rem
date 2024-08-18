@@ -137,8 +137,10 @@ Default:
         - `[/^body$/]` will match `body` but not `.body`
 - `ignoreIdentifier` (Boolean/String)  a way to have a single property ignored, when ignoreIdentifier enabled, then `replace` would be set to `true` automatically.
 - `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
-- `mediaQuery` (Boolean) Allow px to be converted in media queries.
+- `mediaQuery` (Boolean) Allow px to be converted in media query params.
 - `minPixelValue` (Number) Set the minimum pixel value to replace.
+- `onlyMediaQuery` (Boolean) Only allow px to be converted in media queries.
+- `includeMediaQueryParams` (Array) The media query params to include.
 
 ### License
 MIT
